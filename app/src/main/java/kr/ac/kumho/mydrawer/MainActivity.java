@@ -21,20 +21,20 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
+
+    public static final String LOG_TAG = "LOGMainActivity";
+
+    public static final int FRAGMENT_NEWS = 0;
+    public static final int FRAGMENT_REVIEW = 1;
+    public static final int FRAGMENT_QANDA =2;
+    public static final int FRAGMENT_MAP = 3;
+
+    private final int ACTIVITY_LOGIN = 100;
+    private final int ACTIVITY_SIGNUP= 101;
+
+    protected SessionManager mSession = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,34 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //-------------------------------------------------------------------
+
+    public void setNavNick(String nick){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView tv = (TextView) headerView.findViewById(R.id.textNavNick);
+        tv.setText(nick);
+    }
+
+    public void setNavEmail(String email){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView tv = (TextView) headerView.findViewById(R.id.textNavEmail);
+        tv.setText(email);
+    }
+
+    //-------------------------------------------------------------------
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mSession.cancelQueue();
+    }
+
+
+    //-------------------------------------------------------------------
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -85,7 +113,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+    /*
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
@@ -99,7 +127,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
+    */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -135,7 +163,7 @@ public class MainActivity extends AppCompatActivity
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
@@ -167,7 +195,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
     }
 

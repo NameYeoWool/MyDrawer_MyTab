@@ -3,35 +3,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/menu_tab"
+        android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="회원가입" />
+            android:id="@+id/nav_news"
+            android:icon="@android:drawable/ic_menu_add"
+            android:title="뉴스 게시판" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="로그인" />
+            android:id="@+id/nav_review"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="리뷰 게시판" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_qanda"
+            android:icon="@android:drawable/ic_menu_help"
+            android:title="질문 답변" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_map"
+            android:icon="@android:drawable/ic_menu_mapmode"
+            android:title="찾아 오시는 길" />
     </group>
 
-    <item android:title="Communicate">
+    <group
+        android:id="@+id/menu_member"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_signup"
+            android:icon="@android:drawable/ic_menu_add"
+            android:title="회원가입" />
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="로그인" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@android:drawable/ic_menu_delete"
+            android:title="로그아웃" />
+    </group>
+
+    <item android:title="프로그램 정보">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_info"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="프로그램 정보" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_copyright"
+                android:icon="@android:drawable/ic_menu_view"
+                android:title="저작권 정보" />
+
         </menu>
     </item>
 
