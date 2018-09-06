@@ -1,5 +1,6 @@
 package kr.ac.kumho.mydrawer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -12,11 +13,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,11 +31,11 @@ public class MainActivity extends AppCompatActivity
 
     public static final int FRAGMENT_NEWS = 0;
     public static final int FRAGMENT_REVIEW = 1;
-    public static final int FRAGMENT_QANDA =2;
+    public static final int FRAGMENT_QANDA = 2;
     public static final int FRAGMENT_MAP = 3;
 
     private final int ACTIVITY_LOGIN = 100;
-    private final int ACTIVITY_SIGNUP= 101;
+    private final int ACTIVITY_SIGNUP = 101;
 
     protected SessionManager mSession = null;
 
@@ -66,18 +69,23 @@ public class MainActivity extends AppCompatActivity
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        mSession = SessionManager.getsInstance(this);
+        if (mSession.isLogin()) {
+            setNavEmail(mSession.getEmail());
+        }
+
     }
 
     //-------------------------------------------------------------------
 
-    public void setNavNick(String nick){
+    public void setNavNick(String nick) {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         TextView tv = (TextView) headerView.findViewById(R.id.textNavNick);
         tv.setText(nick);
     }
 
-    public void setNavEmail(String email){
+    public void setNavEmail(String email) {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         TextView tv = (TextView) headerView.findViewById(R.id.textNavEmail);
@@ -107,30 +115,115 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-    /*
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
+        if (id == R.id.nav_news) {
+            mViewPager.setCurrentItem(FRAGMENT_NEWS);
+        } else if (id == R.id.nav_review) {
+            mViewPager.setCurrentItem(FRAGMENT_REVIEW);
+        } else if (id == R.id.nav_qanda) {
+            mViewPager.setCurrentItem(FRAGMENT_QANDA);
+        } else if (id == R.id.nav_map) {
+            mViewPager.setCurrentItem(FRAGMENT_MAP);
+        } else if (id == R.id.nav_signup) {
+            if (mSession.isLogin() == false) {
+                Intent intent = new Intent(this, SignupActivity.class);
+                startActivityForResult(intent, ACTIVITY_SIGNUP);
+            } else
+                Toast.makeText(this, "이미 로그인되어 있습니다.",
+                        Toast.LENGTH_SHORT).show();
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_login) {
+            if (mSession.isLogin() == false) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivityForResult(intent, ACTIVITY_LOGIN);
+            } else
+                Toast.makeText(this, "이미 로그인되어 있습니다.",
+                        Toast.LENGTH_SHORT).show();
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_logout) {
+            mSession.Logout();
+        } else if (id == R.id.nav_info) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_copyright) {
 
         }
-    */
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    //====================================================================
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK)
+            return;
+
+        switch ((requestCode)) {
+            case ACTIVITY_LOGIN:
+                Log.i(LOG_TAG, "ACTIVITY_LOGIN");
+
+                if (mSession.isLogin()) {
+                    Log.i(LOG_TAG, "LOGIN");
+                    Toast.makeText(this, "로그인되었습니다.",
+                            Toast.LENGTH_SHORT).show();
+                    TextView tv = (TextView) findViewById(R.id.textNavEmail);
+                    tv.setText(mSession.getEmail());
+                } else {
+                    Log.i(LOG_TAG, "Fail");
+                    Toast.makeText(this, "로그인에 실패했습니다.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case ACTIVITY_SIGNUP:
+                Log.i(LOG_TAG, "ACTIVITY_SIGNUP");
+
+                if (mSession.isLogin()) {
+                    Log.i(LOG_TAG, "FAIL");
+                    Toast.makeText(this, "회원 가입에 실패했습니다.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+
+    //====================================================================
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case FRAGMENT_NEWS:
+                    return new MyFragment();
+                case FRAGMENT_REVIEW:
+                    return new MyFragment();
+                case FRAGMENT_QANDA:
+                    return new MyFragment();
+                case FRAGMENT_MAP:
+                    return new MyFragment();
+                default:
+                    return new MyFragment();
+
+            }
+        }
+
+        @Override
+        public int getCount() {
+            //show 3 total pages.
+            return 4;
+        }
     }
 
     /**
@@ -167,37 +260,4 @@ public class MainActivity extends AppCompatActivity
             return rootView;
         }
     }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            switch(position){
-                case 0:
-                    return new MyFragment();
-                case 1:
-                    return new MyInputFragment();
-                default:
-                    return PlaceholderFragment.newInstance(position + 1);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 4;
-        }
-    }
-
-
-}// end main
+}
