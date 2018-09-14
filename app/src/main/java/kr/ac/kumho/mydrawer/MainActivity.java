@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity
         public Fragment getItem(int position) {
             switch (position) {
                 case FRAGMENT_NEWS:
-                    return new MyFragment();
+                    return new NewsFragment();
                 case FRAGMENT_REVIEW:
                     return new MyFragment();
                 case FRAGMENT_QANDA:

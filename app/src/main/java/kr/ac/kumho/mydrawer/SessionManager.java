@@ -43,6 +43,8 @@ public class SessionManager {
 
     //volly
     protected RequestQueue mQueue = null;
+    public RequestQueue getQueue(){
+        return mQueue;}
     protected boolean mIsLogin = false;
 
 

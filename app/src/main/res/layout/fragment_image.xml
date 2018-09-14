@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="kr.ac.kumho.myapplication.MainActivity$PlaceholderFragment">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/section_label"
@@ -25,7 +24,8 @@
         android:id="@+id/imageView3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@mipmap/ic_launcher"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_aoa_selhyeon2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
