@@ -32,6 +32,9 @@
         <activity
             android:name=".SignupActivity"
             android:label="@string/title_activity_signup"></activity>
+        <activity
+            android:name=".NewsInputActivity"
+            android:label="뉴스 입력"></activity>
     </application>
 
 </manifest>

@@ -1,10 +1,13 @@
 package kr.ac.kumho.mydrawer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +53,20 @@ public class NewsFragment extends Fragment {
         r.setAdapter(mAdapter);
         r.setLayoutManager(new LinearLayoutManager(getContext()));
         r.setItemAnimator(new DefaultItemAnimator());
+
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mSession.isLogin()){
+                    Intent intent = new Intent(getContext(), NewsInputActivity.class);
+                    startActivityForResult(intent,100);
+                }
+                else{
+                    Toast.makeText(getContext(),"로그인하시면 쓸 수 있습니다.",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         CookieHandler.setDefault(new CookieManager());
 
@@ -177,13 +194,16 @@ public class NewsFragment extends Fragment {
 
 
     protected void requestNews() {
-        String url = "http://192.168.56.1/listnews.php?since=0&max=100";
+        String url = "http://115.145.118.54/listnews.php?since=0&max=100";
+        Log.d("", url);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         mResult = response;
+
+                        Log.d("", response.toString());
                         //mTextView.setText(response.toString());
                         drawList();
                     }
@@ -198,5 +218,20 @@ public class NewsFragment extends Fragment {
         mQueue.add(request);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        /* TODO  fix the error code
+        if( resultCode != RRESULT_OK)
+            return;
+
+        switch (requestCode){
+            case 100:
+                String memo = data.getStringExtra("memo");
+                writeNews(memo);
+                break;
+        }
+        */
+    }
 }
